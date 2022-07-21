@@ -1,16 +1,25 @@
-import React from 'react';
+import React from "react";
 
-import './Header.css';
-import OlxLogo from '../../assets/OlxLogo';
-import Search from '../../assets/Search';
-import Arrow from '../../assets/Arrow';
-import SellButton from '../../assets/SellButton';
-import SellButtonPlus from '../../assets/SellButtonPlus';
+import "./Header.css";
+import OlxLogo from "../../assets/OlxLogo";
+import Search from "../../assets/Search";
+import Arrow from "../../assets/Arrow";
+import SellButton from "../../assets/SellButton";
+import SellButtonPlus from "../../assets/SellButtonPlus";
+import { useContext } from "react";
+import { AuthContext } from "../../store/Context";
+import firebase from '../../firebase/config'
+import { Navigate, useNavigate } from "react-router-dom";
+
 function Header() {
+  const { user } = useContext(AuthContext);
+  const navigate= useNavigate()
   return (
     <div className="headerParentDiv">
       <div className="headerChildDiv">
-        <div className="brandName">
+        <div onClick={()=>{
+          navigate('/')
+        }} className="brandName">
           <OlxLogo></OlxLogo>
         </div>
         <div className="placeSearch">
@@ -34,13 +43,26 @@ function Header() {
           <Arrow></Arrow>
         </div>
         <div className="loginPage">
-          <span>Login</span>
+     
+         {
+       user?   <span > {user ? user.displayName : "Login"}</span>: <span onClick={()=>{navigate('login')}} > {user ? user.displayName : "Login"}</span>
+         }
+
+
+          <hr />
+       
           <hr />
         </div>
-
+        { user &&<span onClick={()=>{
+          firebase.auth().signOut().then((e)=>{
+            navigate('/')
+          })
+        }} > Logout </span>}
         <div className="sellMenu">
           <SellButton></SellButton>
-          <div className="sellMenuContent">
+          <div onClick={()=>{
+            navigate('/sell')
+          }} className="sellMenuContent">
             <SellButtonPlus></SellButtonPlus>
             <span>SELL</span>
           </div>

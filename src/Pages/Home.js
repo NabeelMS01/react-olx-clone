@@ -12,6 +12,7 @@ function Home(props) {
       <Header />
       <Banner />
       <Posts />
+      
       <Footer />
     </div>
   );
